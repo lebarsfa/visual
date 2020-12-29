@@ -43,7 +43,7 @@ extrusion::extrusion()
 	normals2D.insert(normals2D.begin(), 0.0);
 }
 
-namespace numpy = boost::python::numeric;
+namespace numpy = boost::python::numpy;
 
 //    Serious issue with 32bit vs 64bit machines, apparently,
 //    with respect to extract/converting from an array (e.g. double <- int),
@@ -59,7 +59,7 @@ void check_array( const array& n_array )
 }
 
 template <typename T>
-void build_contour(const numpy::array& _cont, std::vector<T>& cont)
+void build_contour(const numpy::ndarray& _cont, std::vector<T>& cont)
 {
 	check_array(_cont);
 	std::vector<npy_intp> dims = shape(_cont); 
@@ -72,8 +72,8 @@ void build_contour(const numpy::array& _cont, std::vector<T>& cont)
 }
 
 void
-extrusion::set_contours( const numpy::array& _contours,  const numpy::array& _pcontours,
-		const numpy::array& _strips,  const numpy::array& _pstrips  )
+extrusion::set_contours( const numpy::ndarray& _contours,  const numpy::ndarray& _pcontours,
+		const numpy::ndarray& _strips,  const numpy::ndarray& _pstrips  )
 {
 	// Polygon does not guarantee the winding order of the list of points,
 	// so in primitives.py we force the winding order to be clockwise if

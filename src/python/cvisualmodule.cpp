@@ -11,7 +11,7 @@
 
 #include <boost/python/exception_translator.hpp>
 #include <boost/python/module.hpp>
-#include <boost/python/numeric.hpp>
+#include <boost/python/numpy.hpp>
 #include <boost/python/def.hpp>
 
 #define PY_ARRAY_UNIQUE_SYMBOL visual_PyArrayHandle

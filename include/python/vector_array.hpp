@@ -14,7 +14,7 @@
 #include <deque>
 #include "util/vector.hpp"
 
-#include <boost/python/numeric.hpp>
+#include <boost/python/numpy.hpp>
 
 namespace cvisual { namespace python {
 	
@@ -38,7 +38,7 @@ class vector_array
 	vector_array( const vector_array& v)
 		: data( v.data) {}
 	
-	explicit vector_array( boost::python::numeric::array);
+	explicit vector_array( boost::python::numpy::ndarray);
 
 	inline iterator
 	begin()
@@ -196,9 +196,9 @@ class vector_array
 	void set_y( const scalar_array&);
 	void set_z( const scalar_array&);
 	
-	void set_x( boost::python::numeric::array);
-	void set_y( boost::python::numeric::array);
-	void set_z( boost::python::numeric::array);
+	void set_x( boost::python::numpy::ndarray);
+	void set_y( boost::python::numpy::ndarray);
+	void set_z( boost::python::numpy::ndarray);
 	
 	// Force every element to be this single value.
 	void set_x( double x);

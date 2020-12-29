@@ -67,7 +67,7 @@ struct double_array_from_python {
 			data)->storage.bytes;
 
 		Py_INCREF(_obj);
-		PyObject* arr = PyArray_FromAny(_obj, PyArray_DescrFromType(NPY_DOUBLE), 0, 0, NPY_ENSUREARRAY|NPY_CONTIGUOUS|NPY_ALIGNED, NULL);
+		PyObject* arr = PyArray_FromAny(_obj, PyArray_DescrFromType(NPY_DOUBLE), 0, 0, NPY_ARRAY_ENSUREARRAY|NPY_ARRAY_CONTIGUOUS|NPY_ARRAY_ALIGNED, NULL);
 		if (!arr)
 			throw std::invalid_argument("Object cannot be converted to array.");
 

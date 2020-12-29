@@ -36,12 +36,12 @@ scalar_array::scalar_array( const boost::python::list& sequence)
 	}
 }
 
-scalar_array::scalar_array( const boost::python::numeric::array& sequence)
+scalar_array::scalar_array( const boost::python::numpy::ndarray& sequence)
 	: data( ((PyArrayObject*)sequence.ptr())->dimensions[0])
 {
 	const PyArrayObject* seq_ptr = (PyArrayObject*)sequence.ptr();
 	if (!( seq_ptr->nd == 1
-		&& seq_ptr->descr->type_num == PyArray_DOUBLE)) {
+		&& seq_ptr->descr->type_num == NPY_DOUBLE)) {
 		throw std::invalid_argument( "Must construct a scalar_array from a "
 			"one-dimensional array of type Float64");
 	}
@@ -58,7 +58,7 @@ boost::python::handle<PyObject>
 scalar_array::as_array() const
 {
 	int dims[] = { this->size() };
-	boost::python::handle<> ret( PyArray_FromDims( 1, dims, PyArray_DOUBLE));
+	boost::python::handle<> ret(  PyArray->SimpleNew( 1, dims, NPY_DOUBLE));
 	PyArrayObject* ret_ptr = (PyArrayObject*)ret.get();
 
 	double* r_i = (double*)ret_ptr->data;

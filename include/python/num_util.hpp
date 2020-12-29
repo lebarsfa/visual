@@ -55,13 +55,13 @@ DEALINGS IN THE SOFTWARE.
 // - Changed the definition of PY_ARRAY_UNIQUE_SYMBOL to prevent clashes with
 // other projects using num_util.  2003-12-18
 // - Changed header #includes to reduce compile times.  2003-12-19
-// - Bring boost::python::numeric::array into the visual namespace for
+// - Bring boost::python::numpy::ndarray into the visual namespace for
 // convienience.  2003-12-19
 // - data(), shape(), rank(): Modified to ensure that no calls are made into the
 // Python interpreter, espcially reference counting operations and PyArray_Check()
 // For the reference counting operations, we can guarantee that we do not need
 // them base on the fact that these functions are never called without owning
-// at least one real boost::python::numeric::array.  For the PyArray_Check(),
+// at least one real boost::python::numpy::ndarray.  For the PyArray_Check(),
 // we can guarantee that we *never* have an array on our hands that is not a
 // genuine array.  These functions needed to be changed to ensure that we do not
 // call any functions in the interpreter or Numeric from within the rendering
@@ -72,7 +72,7 @@ DEALINGS IN THE SOFTWARE.
 // Eliminate references to numeric and numarray initiation, add numpy initiation
 
 
-#include <boost/python/numeric.hpp>
+#include <boost/python/numpy.hpp>
 #include <boost/python/extract.hpp>
 #include <numpy/arrayobject.h>
 //#include <iostream>
@@ -84,7 +84,7 @@ DEALINGS IN THE SOFTWARE.
 
 namespace cvisual { namespace python {
 
-  using boost::python::numeric::array;
+  using boost::python::numpy::ndarray;
 
   class double_array : public array {
   public:
@@ -187,7 +187,7 @@ namespace cvisual { namespace python {
     *@param new_data a char pointer referencing the new data.
     *@return -----
     */
-   void copy_data(boost::python::numeric::array arr, char* new_data);
+   void copy_data(boost::python::numpy::ndarray arr, char* new_data);
 
   /**
    *Returns a clone of this array with a new type.

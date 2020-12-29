@@ -14,7 +14,7 @@
 #include "util/vector.hpp"
 #include <deque>
 
-#include <boost/python/numeric.hpp>
+#include <boost/python/numpy.hpp>
 
 namespace cvisual { namespace python {
 
@@ -35,7 +35,7 @@ class scalar_array
 	
 	// Construct from a continuous 1-D sequence (tuple or list)
 	explicit scalar_array( const boost::python::list& sequence);
-	explicit scalar_array( const boost::python::numeric::array& sequence);
+	explicit scalar_array( const boost::python::numpy::ndarray& sequence);
 	
 	inline scalar_array( const scalar_array& other)
 		: data( other.data) {}

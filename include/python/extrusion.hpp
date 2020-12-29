@@ -14,7 +14,7 @@
 namespace cvisual { namespace python {
 
 using boost::python::list;
-using boost::python::numeric::array;
+using boost::python::numpy::ndarray;
 
 class extrusion : public arrayprim_color
 {

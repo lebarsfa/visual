@@ -7,7 +7,7 @@
 // See the file authors.txt for a complete list of contributors.
 
 #include "wrap_gl.hpp"
-#include <boost/python/numeric.hpp>
+#include <boost/python/numpy.hpp>
 #include <iosfwd>
 #include <cmath>
 #include <cassert>

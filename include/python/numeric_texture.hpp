@@ -5,7 +5,7 @@
 #ifndef VPYTHON_PYTHON_NUMERIC_TEXTURE_HPP
 #define VPYTHON_PYTHON_NUMERIC_TEXTURE_HPP
 
-#include <boost/python/numeric.hpp>
+#include <boost/python/numpy.hpp>
 #include "util/texture.hpp"
 #include "python/num_util.hpp"
 #include "wrap_gl.hpp"
@@ -31,7 +31,7 @@ namespace cvisual { namespace python {
 class numeric_texture : public texture
 {
  private:
-	boost::python::numeric::array texdata;
+	boost::python::numpy::ndarray texdata;
 
 	// A texture is data_width x data_height x data_channels
 	size_t data_width;
@@ -67,8 +67,8 @@ class numeric_texture : public texture
 	numeric_texture();
 	virtual ~numeric_texture();
 
-	void set_data( boost::python::numeric::array data);
-	boost::python::numeric::array get_data();
+	void set_data( boost::python::numpy::ndarray data);
+	boost::python::numpy::ndarray get_data();
 
 	void set_type( std::string requested_type);
 	std::string get_type() const;

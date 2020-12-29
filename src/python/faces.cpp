@@ -12,7 +12,7 @@
 #include "python/slice.hpp"
 #include "util/gl_enable.hpp"
 
-using boost::python::numeric::array;
+using boost::python::numpy::ndarray;
 
 namespace cvisual { namespace python {
 

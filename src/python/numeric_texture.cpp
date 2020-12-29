@@ -252,7 +252,7 @@ numeric_texture::gl_transform(void)
 }
 
 void
-numeric_texture::set_data( boost::python::numeric::array data)
+numeric_texture::set_data( boost::python::numpy::ndarray data)
 {
 	namespace py = boost::python;
 	if (data == py::object() && texdata != py::object()) {
@@ -302,12 +302,12 @@ numeric_texture::set_data( boost::python::numeric::array data)
 	data_type = t;
 }
 
-boost::python::numeric::array
+boost::python::numpy::ndarray
 numeric_texture::get_data()
 {
 	// Return a copy, so the user can't mutate the texture in place (it's just too expensive
 	// to check for changes; we make the user assign to texture.data again)
-	return boost::python::extract< boost::python::numeric::array >( texdata.copy() );
+	return boost::python::extract< boost::python::numpy::ndarray >( texdata.copy() );
 }
 
 void

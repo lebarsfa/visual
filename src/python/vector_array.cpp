@@ -61,14 +61,14 @@ namespace cvisual {namespace python {
 			}
 		}
 
-		vector_array::vector_array( boost::python::numeric::array sequence)
+		vector_array::vector_array( boost::python::numpy::ndarray sequence)
 		: data( ((PyArrayObject*)sequence.ptr())->dimensions[0])
 		{
 			const PyArrayObject* seq_ptr = (const PyArrayObject*)sequence.ptr();
 
 			if (!( seq_ptr->nd == 2
 							&& seq_ptr->dimensions[1] == 3
-							&& seq_ptr->descr->type_num == PyArray_DOUBLE)) {
+							&& seq_ptr->descr->type_num == NPY_DOUBLE)) {
 				throw std::invalid_argument( "Must construct a vector_array from an Nx3 array of type Float64.");
 			}
 
@@ -782,19 +782,19 @@ namespace cvisual {namespace python {
 		}
 
 		void
-		vector_array::set_x( boost::python::numeric::array x)
+		vector_array::set_x( boost::python::numpy::ndarray x)
 		{
 			this->set_x( scalar_array( x));
 		}
 
 		void
-		vector_array::set_y( boost::python::numeric::array y)
+		vector_array::set_y( boost::python::numpy::ndarray y)
 		{
 			this->set_y( scalar_array( y));
 		}
 
 		void
-		vector_array::set_z( boost::python::numeric::array z)
+		vector_array::set_z( boost::python::numpy::ndarray z)
 		{
 			this->set_z( scalar_array( z));
 		}
@@ -822,7 +822,7 @@ namespace cvisual {namespace python {
 		{
 			// Make space for the returned array
 			int dims[] = {size(), 3};
-			boost::python::handle<> ret( PyArray_FromDims( 2, dims, PyArray_DOUBLE));
+			boost::python::handle<> ret(  PyArray->SimpleNew( 2, dims, NPY_DOUBLE));
 
 			// A direct pointer to the PyArrayObject
 			PyArrayObject* ret_ptr = (PyArrayObject *)ret.get();
