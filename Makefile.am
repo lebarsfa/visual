@@ -12,8 +12,8 @@ EXTRA_DIST = include HACKING.txt INSTALL.txt \
 dist-hook:
 	rm -rf `find $(distdir)/include -name CVS` $(distdir)/include/config.h
 
-# Logic to install the "vpython" script
-bin_SCRIPTS = bin/vpython
+# Logic to install the "vpython" script (doesn't work properly)
+#bin_SCRIPTS = bin/vpython
 
 if BUILD_EXAMPLES
 SUBDIRS += examples
