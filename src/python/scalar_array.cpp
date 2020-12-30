@@ -37,31 +37,30 @@ scalar_array::scalar_array( const boost::python::list& sequence)
 }
 
 scalar_array::scalar_array( const boost::python::numpy::ndarray& sequence)
-	: data( ((PyArrayObject*)sequence.ptr())->dimensions[0])
+	: data( ((PyArrayObject*)sequence.shape(0))
 {
-	const PyArrayObject* seq_ptr = (PyArrayObject*)sequence.ptr();
-	if (!( seq_ptr->nd == 1
-		&& seq_ptr->descr->type_num == NPY_DOUBLE)) {
+	if (!( sequence.get_nd() == 1
+		&& sequence.get_dtype() == boost::python::numpy::dtype::get_builtin<double>())) {
 		throw std::invalid_argument( "Must construct a scalar_array from a "
 			"one-dimensional array of type Float64");
 	}
 
-	const double* seq_i = (const double*)seq_ptr->data;
+	const double* seq_i = (const double*)sequence.get_data();
 	iterator i = this->begin();
 	for ( ; i != this->end(); ++i, ++seq_i) {
 		*i = *seq_i;
 	}
 }
 
-// Convert to a Numeric.array
+// Convert to a numpy.ndarray
 boost::python::handle<PyObject>
 scalar_array::as_array() const
 {
-	int dims[] = { this->size() };
-	boost::python::handle<> ret(  PyArray->SimpleNew( 1, dims, NPY_DOUBLE));
+	npy_intp dims[] = { this->size() };
+	boost::python::handle<> ret( PyArray_SimpleNew( 1, dims, NPY_DOUBLE));
 	PyArrayObject* ret_ptr = (PyArrayObject*)ret.get();
 
-	double* r_i = (double*)ret_ptr->data;
+	double* r_i = (double*)PyArray_DATA(ret_ptr);
 	const_iterator i = this->begin();
 	for ( ; i != this->end(); ++i, ++r_i) {
 		*r_i = *i;
@@ -404,7 +403,7 @@ wrap_scalar_array()
 
 	class_<scalar_array>( "scalar_array", init< optional<int, double> >( args( "size", "fill" ) ))
 		.def( init<const list&>())
-		.def( init<numeric::array>())
+		.def( init<numpy::ndarray>())
 		.def( self + self)
 		.def( self + other<double>())
 		.def( self += self)
@@ -440,7 +439,7 @@ wrap_scalar_array()
 		.def( "tail_crop", &scalar_array::tail_crop)
 		.def( "sum", &scalar_array::sum, "Returns the sum of all elements in the array.")
 		.def( "as_array", &scalar_array::as_array,
-			"Returns a new self.__len__() x 1 Numeric.array from this scalar_array.")
+			"Returns a new self.__len__() x 1 numpy.ndarray from this scalar_array.")
 		;
 
 }

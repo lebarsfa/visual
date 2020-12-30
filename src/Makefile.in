@@ -180,7 +180,7 @@ ifeq ($(PYTHON_PLATFORM),win32)
   CXX_RULE = $(DEFAULT_CXX_RULE)
   LINK_RULE = $(WIN32_DLLRULE)
   CVISUAL_CPPFLAGS += $(WIN32_CPPFLAGS) $(GTK_CFLAGS) $(GTHREAD_CFLAGS)
-  CVISUAL_LIBS += $(WIN32_LIBS) $(GTK_LIBS) $(GTHREAD_LIBS) -lboost_thread-mt -lboost_signals-mt
+  CVISUAL_LIBS += $(WIN32_LIBS) $(GTK_LIBS) $(GTHREAD_LIBS) -lboost_numpy-mt -lboost_thread-mt -lboost_signals-mt
   CVISUAL_LDFLAGS += $(WIN32_LDFLAGS)
   PLATFORM_TARGET = cvisual.pyd
   PLATFORM_OBJS = winrate.lo
@@ -200,7 +200,7 @@ else
   ifeq ($(PYTHON_PLATFORM),darwin)
     # Special rules for OSX
     CVISUAL_LIBS += $(filter-out $(_FILTER_OUT), $(GTK_LIBS) \
-       $(GTHREAD_LIBS) /sw/lib/libboost_python-mt.a -lboost_thread-mt -lboost_signals)
+       $(GTHREAD_LIBS) /sw/lib/libboost_python-mt.a -lboost_numpy-mt -lboost_thread-mt -lboost_signals)
     CXX_RULE = $(DEFAULT_CXX_RULE)
     LINK_RULE = $(OSX_SORULE)
     PLATFORM_TARGET = cvisualmodule.so
@@ -209,10 +209,11 @@ else
  else
     # Libtoolish rules.  These should apply to all POSIX-like systems.
     CVISUAL_LIBS += $(filter-out $(_FILTER_OUT), $(GTK_LIBS) \
-       $(GTHREAD_LIBS) -lboost_python -lboost_thread -lboost_signals)
-#       $(GTHREAD_LIBS) -lboost_python-gcc44-mt -lboost_thread-gcc44-mt -lboost_signals-gcc44-mt)
+       $(GTHREAD_LIBS) -lboost_python -lboost_numpy -lboost_thread -lboost_signals)
+#       $(GTHREAD_LIBS) -lboost_python-gcc44-mt -lboost_numpy-gcc44-mt -lboost_thread-gcc44-mt -lboost_signals-gcc44-mt)
 #    $(GTHREAD_LIBS) \
 #    -l$(top_srcdir)/dependencies/boost_files/linux_libs/boost_python \
+#    -l$(top_srcdir)/dependencies/boost_files/linux_libs/boost_numpy \
 #    -l$(top_srcdir)/dependencies/boost_files/linux_libs/boost_signals \
 #    -l$(top_srcdir)/dependencies/boost_files/linux_libs/boost_thread)
     CXX_RULE = $(LT_CXX_RULE)

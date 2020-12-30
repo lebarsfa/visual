@@ -110,7 +110,7 @@ class extrusion : public arrayprim_color
 
 	boost::python::object _faces_render();
 
-	void set_contours( const array&, const array&, const array&, const array& );
+	void set_contours( const ndarray&, const ndarray&, const ndarray&, const ndarray& );
 
 	// There were unsolvable problems with rotate. See comments with intrude routine.
 	//void rotate( double angle, const vector& _axis, const vector& origin);

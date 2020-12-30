@@ -120,6 +120,7 @@ Now execute ./bjam to build the Boost libraries for 32-bit Python.
 
 The files you want will be in stage/lib. Move the following files to  dependencies/boost_files/mac_libs:
 libboost_python.a
+libboost_numpy.a
 libboost_signals.a
 libboost_thread.a
 Also move the boost folder to dependencies/boost_files/boost

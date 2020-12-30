@@ -15,7 +15,7 @@ namespace cvisual { namespace python {
 // should not go anywhere except inside an array primitive, not even as a return
 // value for primitive.pos or whatever.
 template <class CTYPE>
-class arrayprim_array : public array, private boost::noncopyable {
+class arrayprim_array : public ndarray, private boost::noncopyable {
 protected:
 	size_t length;     // number of points in the array primitive
 	size_t allocated;  // == shape(*this)[0]
@@ -23,7 +23,7 @@ protected:
 public:
 	arrayprim_array();
 	arrayprim_array( const arrayprim_array& r )  //< Actually copies, to avoid aliasing between array primitives
-		: array(object(r)) {}
+		: ndarray(boost::python::numpy::array(object(r))) {}
 
 	void set_length( size_t new_len );
 

@@ -4,6 +4,27 @@ for Windows and Mac are available at vpython.org. See HACKING.txt
 for details on how to do development work with the source code for
 Linux.
 
+*********************************************
+QUICK INFO for Ubuntu 18.04:
+
+sudo apt-get update
+sudo apt-get install libgtkglextmm-x11-1.2-dev libglademm-2.4-dev python-dev python-pip python-numpy python-fonttools libboost-python-dev libboost-numpy-dev libboost-thread-dev libboost-signals-dev
+sudo pip install Polygon2 ttfquery
+wget https://github.com/vpython/vpython.docs/archive/master.zip
+unzip -q master.zip
+mv -f vpython.docs-master docs
+mkdir bin ; touch bin/vpython.in
+sh ./autogen.sh
+./configure
+make
+sudo make install
+sudo rm -Rf /usr/local/lib/python2.7/dist-packages/visual
+sudo mv -f /usr/local/lib/python2.7/site-packages/visual /usr/local/lib/python2.7/dist-packages/
+sudo rm -Rf /usr/local/lib/python2.7/dist-packages/vis
+sudo mv -f /usr/local/lib/python2.7/site-packages/vis /usr/local/lib/python2.7/dist-packages/
+
+*********************************************
+
 Windows and Mac builds are now special to them; 
 see VCBuild/VCBuild.txt and MAC-OSX.txt.
 
@@ -20,7 +41,7 @@ I.  Prerequisites:
 	of the packages to ensure that the required header files are 
 	available.
 	
-	GNU g++ version 3.2.x or >= 3.3.1 (3.4.6 reccomended) (gcc.gnu.org).
+	GNU g++ version 3.2.x or >= 3.3.1 (3.4.6 recommended) (gcc.gnu.org).
 	An implementation of OpenGL.
 	The Boost C++ libraries version 1.31 and higher (1.33.1 reccomended)
 		(www.boost.org). Note that 1.31 is required if you are using Python 

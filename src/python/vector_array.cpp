@@ -62,17 +62,15 @@ namespace cvisual {namespace python {
 		}
 
 		vector_array::vector_array( boost::python::numpy::ndarray sequence)
-		: data( ((PyArrayObject*)sequence.ptr())->dimensions[0])
+		: data( ((PyArrayObject*)sequence.shape(0))
 		{
-			const PyArrayObject* seq_ptr = (const PyArrayObject*)sequence.ptr();
-
-			if (!( seq_ptr->nd == 2
-							&& seq_ptr->dimensions[1] == 3
-							&& seq_ptr->descr->type_num == NPY_DOUBLE)) {
+			if (!( sequence.get_nd() == 2
+							&& sequence.shape(1) == 3
+							&& sequence.get_dtype() == boost::python::numpy::dtype::get_builtin<double>())) {
 				throw std::invalid_argument( "Must construct a vector_array from an Nx3 array of type Float64.");
 			}
 
-			const double* seq_i = (const double*)seq_ptr->data;
+			const double* seq_i = (const double*)sequence.get_data();
 			iterator i = this->begin();
 			for (; i != this->end(); ++i, seq_i += 3) {
 				*i = vector( seq_i[0], seq_i[1], seq_i[2]);
@@ -821,14 +819,14 @@ namespace cvisual {namespace python {
 		vector_array::as_array() const
 		{
 			// Make space for the returned array
-			int dims[] = {size(), 3};
-			boost::python::handle<> ret(  PyArray->SimpleNew( 2, dims, NPY_DOUBLE));
+			npy_intp dims[] = {size(), 3};
+			boost::python::handle<> ret( PyArray_SimpleNew( 2, dims, NPY_DOUBLE));
 
 			// A direct pointer to the PyArrayObject
 			PyArrayObject* ret_ptr = (PyArrayObject *)ret.get();
 
 			// Iterable pointers to copy the data.
-			double* r_i = (double *) ret_ptr->data;
+			double* r_i = (double *) PyArray_DATA(ret_ptr);
 			const_iterator i = this->begin();
 			// Copy the data.
 			for (; i != this->end(); ++i, r_i += 3) {
@@ -919,13 +917,13 @@ namespace cvisual {namespace python {
 
 			// Overloaded setters for 'x', 'y', and 'z' properties
 			void (vector_array::* set_x_s)(const scalar_array&) = &vector_array::set_x;
-			void (vector_array::* set_x_n)(numeric::array) = &vector_array::set_x;
+			void (vector_array::* set_x_n)(numpy::ndarray) = &vector_array::set_x;
 			void (vector_array::* set_x_d)(double) = &vector_array::set_x;
 			void (vector_array::* set_y_s)(const scalar_array&) = &vector_array::set_y;
-			void (vector_array::* set_y_n)(numeric::array) = &vector_array::set_y;
+			void (vector_array::* set_y_n)(numpy::ndarray) = &vector_array::set_y;
 			void (vector_array::* set_y_d)(double) = &vector_array::set_y;
 			void (vector_array::* set_z_s)(const scalar_array&) = &vector_array::set_z;
-			void (vector_array::* set_z_n)(numeric::array) = &vector_array::set_z;
+			void (vector_array::* set_z_n)(numpy::ndarray) = &vector_array::set_z;
 			void (vector_array::* set_z_d)(double) = &vector_array::set_z;
 
 			vector_array (vector_array::* truediv_double)( double) const = &vector_array::operator/;
@@ -935,7 +933,7 @@ namespace cvisual {namespace python {
 
 			class_<vector_array> vector_array_wrapper( "vector_array", init< optional<int, vector> >( args("size", "fill")));
 			vector_array_wrapper.def( init<const list&>())
-			.def( init<numeric::array>())
+			.def( init<numpy::ndarray>())
 			.def( self * double())
 			.def( double() * self)
 			.def( self * other<scalar_array>())
@@ -1013,7 +1011,7 @@ namespace cvisual {namespace python {
 			.def( "set_z", set_z_n)
 			.def( "set_z", set_z_d)
 			.def( "sum", &vector_array::sum, "Returns the sum of all elements in the array.")
-			.def( "as_array", &vector_array::as_array, "Create a self.__len__() x 3 Numeric.array from this vector_array.")
+			.def( "as_array", &vector_array::as_array, "Create a self.__len__() x 3 numpy.ndarray from this vector_array.")
 			;
 
 			vector_array_wrapper.add_property( "x", vector_array_wrapper.attr("get_x"),

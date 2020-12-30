@@ -9,12 +9,12 @@ using boost::python::tuple;
 
 template <class CTYPE>
 arrayprim_array<CTYPE>::arrayprim_array()
- : array(NULL), length(0), allocated(256)
+ : ndarray(boost::python::numpy::array(object(NULL))), length(0), allocated(256)
 {
 	std::vector<npy_intp> dims(2);
 	dims[0] = allocated;
 	dims[1] = 3;
-	array::operator=( makeNum( dims, (NPY_TYPES)type_npy_traits<CTYPE>::npy_type ) );
+	ndarray::operator=( makeNum( dims, (NPY_TYPES)type_npy_traits<CTYPE>::npy_type ) );
 }
 
 template <class CTYPE>
@@ -37,9 +37,9 @@ void arrayprim_array<CTYPE>::set_length( size_t new_len ) {
 		dims[0] = 2*(new_len-1);
 		dims[1] = 3;
 
-		array n_arr = makeNum( dims, (NPY_TYPES)type_npy_traits<CTYPE>::npy_type );
+		ndarray n_arr = makeNum( dims, (NPY_TYPES)type_npy_traits<CTYPE>::npy_type );
 		std::memcpy( cvisual::python::data(n_arr), data(0), sizeof(CTYPE) * old_len * dims[1] );
-		array::operator=( n_arr ); // doesn't actually copy
+		ndarray::operator=( n_arr ); // doesn't actually copy
 
 		allocated = dims[0];
 	}
@@ -82,7 +82,7 @@ void arrayprim::set_pos( const double_array& n_pos )
 		return;
 	}
 	if (dims.size() != 2) {
-		throw std::invalid_argument( "pos must be an Nx3 array");
+		throw std::invalid_argument( "pos must be an Nx3 ndarray");
 	}
 	if (dims[1] == 2) {
 		set_length( dims[0] );
@@ -96,7 +96,7 @@ void arrayprim::set_pos( const double_array& n_pos )
 		return;
 	}
 	else {
-		throw std::invalid_argument( "pos must be an Nx3 array");
+		throw std::invalid_argument( "pos must be an Nx3 ndarray");
 	}
 }
 
@@ -107,21 +107,21 @@ void arrayprim::set_pos_v( const vector& npos ) {
 
 void arrayprim::set_x( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("x must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("x must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	pos[make_tuple( all(), 0)] = arg;
 }
 
 void arrayprim::set_y( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("y must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("y must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	pos[make_tuple( all(), 1)] = arg;
 }
 
 void arrayprim::set_z( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("z must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("z must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	pos[make_tuple( all(), 2)] = arg;
 }
@@ -188,26 +188,26 @@ void arrayprim_color::set_color( const double_array& n_color)
 		color[all()] = n_color;
 		return;
 	}
-	throw std::invalid_argument( "color must be an Nx3 array");
+	throw std::invalid_argument( "color must be an Nx3 ndarray");
 }
 
 void arrayprim_color::set_red( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("red must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("red must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	color[make_tuple( all(), 0)] = arg;
 }
 
 void arrayprim_color::set_green( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("green must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("green must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	color[make_tuple( all(), 1)] = arg;
 }
 
 void arrayprim_color::set_blue( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("blue must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("blue must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	color[make_tuple( all(), 2)] = arg;
 }

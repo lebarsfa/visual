@@ -50,11 +50,11 @@ namespace numpy = boost::python::numpy;
 //    so for the time being, make sure that in primitives.py one builds
 //    the contour arrays as double and int.
 
-void check_array( const array& n_array )
+void check_array( const ndarray& n_array )
 {
 	std::vector<npy_intp> dims = shape( n_array );
 	if (!(dims.size() == 2 && dims[1] == 2)) {
-		throw std::invalid_argument( "This must be an Nx2 array");
+		throw std::invalid_argument( "This must be an Nx2 ndarray");
 	}
 }
 
@@ -365,7 +365,7 @@ extrusion::set_scale( const double_array& n_scale)
 		return;
 	}
 	else {
-		throw std::invalid_argument( "scale must be an Nx2 array");
+		throw std::invalid_argument( "scale must be an Nx2 ndarray");
 	}
 }
 
@@ -384,7 +384,7 @@ boost::python::object extrusion::get_scale() {
 void
 extrusion::set_xscale( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("xscale must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("xscale must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	scale[make_tuple( all(), 0)] = arg;
 }
@@ -392,7 +392,7 @@ extrusion::set_xscale( const double_array& arg )
 void
 extrusion::set_yscale( const double_array& arg )
 {
-	if (shape(arg).size() != 1) throw std::invalid_argument("yscale must be a 1D array.");
+	if (shape(arg).size() != 1) throw std::invalid_argument("yscale must be a 1D ndarray.");
 	set_length( shape(arg)[0] );
 	scale[make_tuple( all(), 1)] = arg;
 }
@@ -428,7 +428,7 @@ extrusion::set_twist( const double_array& n_twist)
 		return;
 	}
 	if (dims.size() != 2) {
-		throw std::invalid_argument( "twist must be an Nx1 array");
+		throw std::invalid_argument( "twist must be an Nx1 ndarray");
 	}
 	if (dims[1] == 1) {
 		set_length( dims[0] );
@@ -436,7 +436,7 @@ extrusion::set_twist( const double_array& n_twist)
 		return;
 	}
 	else {
-		throw std::invalid_argument( "twist must be an Nx1 array");
+		throw std::invalid_argument( "twist must be an Nx1 ndarray");
 	}
 }
 
@@ -742,7 +742,7 @@ boost::python::object extrusion::_faces_render() {
 	size_t d = faces_pos.size(); // number of pos vectors (3*d doubles)
 	dimens[0] = 3*d; // make array of vectors 3d long (pos, normals, colors)
 	dimens[1] = 3;
-	array faces_data = makeNum(dimens);
+	ndarray faces_data = makeNum(dimens);
 	memmove( data(faces_data), &faces_pos[0], sizeof(vector)*d );
 	memmove( data(faces_data)+sizeof(vector)*d, &faces_normals[0], sizeof(vector)*d );
 	memmove( data(faces_data)+sizeof(vector)*2*d, &faces_colors[0], sizeof(vector)*d );

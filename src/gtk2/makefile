@@ -10,7 +10,7 @@
 # it unnecessary to move cvisualmodule.so into the actual site-packages directory.
 
 prefix = /usr
-PYTHON_VERSION = 2.6
+PYTHON_VERSION = 2.7
 PYTHON_INCLUDES = -I/usr/include/python$(PYTHON_VERSION) \
    -I$(prefix)/lib/python$(PYTHON_VERSION)/site-packages/numpy/core/include
 #SITE_PACKAGES = /usr/lib/python$(PYTHON_VERSION)/site-packages/
@@ -55,11 +55,11 @@ CVISUAL_CXXFLAGS = -g -O2 -ftemplate-depth-120 -fPIC -DPIC
 
 #_FILTER_OUT = "-Wl,--export-dynamic"
 #CVISUAL_LIBS += $(filter-out $(_FILTER_OUT), $(GTK_LIBS) \
-#       $(GTHREAD_LIBS) -lpython$(PYTHON_VERSION) -lboost_python-mt -lboost_thread-mt -lboost_signals-mt)
+#       $(GTHREAD_LIBS) -lpython$(PYTHON_VERSION) -lboost_python-mt -lboost_numpy-mt -lboost_thread-mt -lboost_signals-mt)
 #CVISUAL_LIBS += -lstdc++
 
 CVISUAL_LIBS += $(GTK_LIBS) $(GTHREAD_LIBS) \
-       -lpython$(PYTHON_VERSION) -lboost_python-mt -lboost_signals-mt -lboost_thread-mt -lstdc++
+       -lpython$(PYTHON_VERSION) -lboost_python-mt -lboost_numpy-mt -lboost_signals-mt -lboost_thread-mt -lstdc++
 
 CVISUAL_OBJS = arrayprim.o arrow.o axial.o box.o cone.o cylinder.o display_kernel.o ellipsoid.o \
 	frame.o label.o material.o mouse_manager.o mouseobject.o primitive.o pyramid.o \

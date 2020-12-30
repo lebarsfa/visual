@@ -46,6 +46,7 @@ cvisual.so : $(OBJS)
 	$(OBJS) \
 	-framework AGL -framework Carbon -framework OpenGL -framework Python \
 	$(BOOST)libboost_python.a \
+	$(BOOST)libboost_numpy.a \
 	$(BOOST)libboost_signals.a \
 	$(BOOST)libboost_thread.a
 

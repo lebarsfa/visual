@@ -144,7 +144,7 @@ BOOST_PYTHON_MODULE( cvisual)
 	VPYTHON_NOTE( "Importing cvisual from vpython-core2.");
 
 	using namespace boost::python;
-	numeric::array::set_module_and_type( "numpy", "ndarray");
+	//numpy::ndarray::set_module_and_type( "numpy", "ndarray");
 
 #if __GNUG__
 #if __GNUC__ == 3

@@ -25,7 +25,7 @@ namespace cvisual {
 namespace py = boost::python;
 using namespace cvisual::python;
 
-using py::numeric::array;
+using py::numpy::ndarray;
 using py::object;
 using py::extract;
 
@@ -36,7 +36,7 @@ using py::allow_null;
 namespace {
 
 void
-validate_array( const array& arr)
+validate_array( const ndarray& arr)
 {
 	std::vector<npy_intp> dims = shape(arr);
 	if (type(arr) != NPY_DOUBLE) {
@@ -57,7 +57,7 @@ validate_array( const array& arr)
 	}
 }
 
-// Numeric doens't support the Sequence protocol, so I have to use this hack
+// numpy doens't support the Sequence protocol, so I have to use this hack
 // instead.
 // 2008/2/16 BAS asks, "What is the situation with numpy?" Should look into this.
 inline int
@@ -91,11 +91,11 @@ tovector( py::object arr)
 }
 
 object
-mag_a( const array& arr)
+mag_a( const ndarray& arr)
 {
 	validate_array( arr);
 	std::vector<npy_intp> dims = shape(arr);
-	// Magnitude of a flat 3-length array
+	// Magnitude of a flat 3-length ndarray
 	if (dims.size() == 1 && dims[0] == 3) {
 		return object( vector(
 			extract<double>(arr[0]),
@@ -104,7 +104,7 @@ mag_a( const array& arr)
 	}
 	std::vector<npy_intp> rdims(1);
 	rdims[0] = dims[0];
-	array ret = makeNum( rdims);
+	ndarray ret = makeNum( rdims);
 	for (int i = 0; i< rdims[0]; ++i) {
 		ret[i] = tovector(arr[i]).mag();
 	}
@@ -112,7 +112,7 @@ mag_a( const array& arr)
 }
 
 object
-mag2_a( const array& arr)
+mag2_a( const ndarray& arr)
 {
 	validate_array( arr);
 	std::vector<npy_intp> dims = shape(arr);
@@ -125,16 +125,16 @@ mag2_a( const array& arr)
 	}
 	std::vector<npy_intp> rdims(1);
 	rdims[0] = dims[0];
-	array ret = makeNum( rdims);
+	ndarray ret = makeNum( rdims);
 	for (int i = 0; i < rdims[0]; ++i) {
 		ret[i] = tovector(arr[i]).mag2();
 	}
-	// Returns an object of type Numeric.array.
+	// Returns an object of type numpy.ndarray.
 	return ret;
 }
 
 object
-norm_a( const array& arr)
+norm_a( const ndarray& arr)
 {
 	validate_array( arr);
 	std::vector<npy_intp> dims = shape(arr);
@@ -145,16 +145,16 @@ norm_a( const array& arr)
 			extract<double>(arr[1]),
 			extract<double>(arr[2])).norm());
 	}
-	array ret = makeNum(dims);
+	ndarray ret = makeNum(dims);
 	for (int i = 0; i < dims[0]; ++i) {
 		ret[i] = tovector(arr[i]).norm();
 	}
-	// Returns a Numeric.array
+	// Returns a numpy.ndarray
 	return ret;
 }
 
-array
-dot_a( const array& arg1, const array& arg2)
+ndarray
+dot_a( const ndarray& arg1, const ndarray& arg2)
 {
 	validate_array( arg1);
 	validate_array( arg2);
@@ -166,7 +166,7 @@ dot_a( const array& arg1, const array& arg2)
 
 	std::vector<npy_intp> dims_ret(1);
 	dims_ret[0] = dims1[0];
-	array ret = makeNum( dims_ret);
+	ndarray ret = makeNum( dims_ret);
 	const double* arg1_i = (double*)data(arg1);
 	const double* arg2_i = (double*)data(arg2);
 	for ( int i = 0; i < dims1[0]; ++i, arg1_i +=3, arg2_i += 3) {
@@ -175,8 +175,8 @@ dot_a( const array& arg1, const array& arg2)
 	return ret;
 }
 
-array
-cross_a_a( const array& arg1, const array& arg2)
+ndarray
+cross_a_a( const ndarray& arg1, const ndarray& arg2)
 {
 	validate_array( arg1);
 	validate_array( arg2);
@@ -186,7 +186,7 @@ cross_a_a( const array& arg1, const array& arg2)
 		throw std::invalid_argument( "Array shape mismatch.");
 	}
 
-	array ret = makeNum( dims1);
+	ndarray ret = makeNum( dims1);
 	const double* arg1_i = (double*)data(arg1);
 	const double* arg2_i = (double*)data(arg2);
 	double* ret_i = (double*)data(ret);
@@ -200,12 +200,12 @@ cross_a_a( const array& arg1, const array& arg2)
 	return ret;
 }
 
-array
-cross_a_v( const array& arg1, const vector& arg2)
+ndarray
+cross_a_v( const ndarray& arg1, const vector& arg2)
 {
 	validate_array( arg1);
 	std::vector<npy_intp> dims = shape( arg1);
-	array ret = makeNum( dims);
+	ndarray ret = makeNum( dims);
 	const double* arg1_i = (double*)data( arg1);
 	double* ret_i = (double*)data( ret);
 	double* const ret_stop = ret_i + 3*dims[0];
@@ -219,12 +219,12 @@ cross_a_v( const array& arg1, const vector& arg2)
 	return ret;
 }
 
-array
-cross_v_a( const vector& arg1, const array& arg2)
+ndarray
+cross_v_a( const vector& arg1, const ndarray& arg2)
 {
 	validate_array( arg2);
 	std::vector<npy_intp> dims = shape( arg2);
-	array ret = makeNum( dims);
+	ndarray ret = makeNum( dims);
 	const double* arg2_i = (double*)data( arg2);
 	double* ret_i = (double*)data( ret);
 	double* const ret_stop = ret_i + 3*dims[0];
@@ -326,7 +326,7 @@ vector_pos( const vector& v)
 void
 wrap_vector()
 {
-	// Numeric versions for some of the above
+	// numpy versions for some of the above
 	// TODO: round out the set.
 	def( "mag", mag_a);
 	def( "dot", dot_a);

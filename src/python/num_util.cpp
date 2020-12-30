@@ -57,7 +57,7 @@ namespace {
   // Local function prototypes
   using namespace boost::python;
   namespace cvisual { namespace python {
-    static int rank(const numeric::array& arr);
+    static int rank(const numpy::ndarray& arr);
   } } // !namespace cvisual::python
 
 namespace cvisual{ namespace python {
@@ -70,6 +70,8 @@ void
 #endif
 init_numpy()
 {
+	Py_Initialize();
+	boost::python::numpy::initialize();	
 	import_array();
 }
 
@@ -182,17 +184,17 @@ static KindTypeMap kindtypes(kindTypeMapEntries,
                                    kindTypeMapEntries + numTypeEntries);
 
 //Create a Numeric array with dimensions dimens and Numeric type t
-numeric::array makeNum(const std::vector<npy_intp>& dimens, NPY_TYPES t){
+numpy::ndarray makeNum(const std::vector<npy_intp>& dimens, NPY_TYPES t){
   object obj(handle<>(PyArray_SimpleNew(dimens.size(), const_cast<npy_intp*>(&dimens[0]), t)));
-  return extract<numeric::array>(obj);
+  return extract<numpy::ndarray>(obj);
 }
 
 
-NPY_TYPES type(numeric::array arr){
-  return NPY_TYPES (PyArray_TYPE(arr.ptr()));
+NPY_TYPES type(numpy::ndarray arr){
+  return NPY_TYPES (PyArray_TYPE((PyArrayObject*)arr.ptr()));
 }
 
-void check_type(numeric::array arr,
+void check_type(numpy::ndarray arr,
 		NPY_TYPES expected_type){
   NPY_TYPES actual_type = type(arr);
   if (actual_type != expected_type) {
@@ -207,23 +209,23 @@ void check_type(numeric::array arr,
 
 // Return the number of dimensions
 static int
-rank(const numeric::array& arr)
+rank(const numpy::ndarray& arr)
 {
    if(!PyArray_Check(arr.ptr())){
       PyErr_SetString(PyExc_ValueError, "expected a PyArrayObject");
       throw_error_already_set();
 	}
-	return PyArray_NDIM(arr.ptr());
+	return PyArray_NDIM((PyArrayObject*)arr.ptr());
 //	return ((PyArrayObject*) arr.ptr())->nd;
 }
 
-std::vector<npy_intp> shape(numeric::array arr){
+std::vector<npy_intp> shape(numpy::ndarray arr){
   std::vector<npy_intp> out_dims;
   if(!PyArray_Check(arr.ptr())){
     PyErr_SetString(PyExc_ValueError, "expected a PyArrayObject");
     throw_error_already_set();
   }
-  npy_intp* dims_ptr = PyArray_DIMS(arr.ptr());
+  npy_intp* dims_ptr = PyArray_DIMS((PyArrayObject*)arr.ptr());
   int the_rank = rank(arr);
   for (int i = 0; i < the_rank; i++){
     out_dims.push_back(*(dims_ptr + i));
@@ -231,13 +233,13 @@ std::vector<npy_intp> shape(numeric::array arr){
   return out_dims;
 }
 
-bool iscontiguous(numeric::array arr)
+bool iscontiguous(numpy::ndarray arr)
 {
   //  return arr.iscontiguous();
-  return PyArray_ISCONTIGUOUS(arr.ptr());
+  return PyArray_ISCONTIGUOUS((PyArrayObject*)arr.ptr());
 }
 
-void check_contiguous(numeric::array arr)
+void check_contiguous(numpy::ndarray arr)
 {
   if (!iscontiguous(arr)) {
     PyErr_SetString(PyExc_RuntimeError, "expected a contiguous array");
@@ -247,17 +249,17 @@ void check_contiguous(numeric::array arr)
 }
 
 char*
-data(const numeric::array& arr){
+data(const numpy::ndarray& arr){
   if(!PyArray_Check(arr.ptr())){
     PyErr_SetString(PyExc_ValueError, "expected a PyArrayObject");
     throw_error_already_set();
   }
-  return PyArray_BYTES(arr.ptr());
+  return PyArray_BYTES((PyArrayObject*)arr.ptr());
 }
 
 //Return a clone of this array with a new type
-numeric::array astype(numeric::array arr, NPY_TYPES t){
-  return (numeric::array) arr.astype(type2char(t));
+numpy::ndarray astype(numpy::ndarray arr, NPY_TYPES t){
+  return arr.astype(numpy::dtype(object(t)));
 }
 
 std::string type2string(NPY_TYPES t_type){
