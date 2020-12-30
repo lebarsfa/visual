@@ -13,7 +13,6 @@ sudo pip install Polygon2 ttfquery
 wget https://github.com/vpython/vpython.docs/archive/master.zip
 unzip -q master.zip
 mv -f vpython.docs-master docs
-mkdir bin ; touch bin/vpython.in
 sh ./autogen.sh
 ./configure
 make
